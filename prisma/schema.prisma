@@ -1,0 +1,288 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Persona {
+  id                  Int      @id @default(autoincrement())
+  dni                 String   @unique @db.VarChar(8)
+  nombres             String
+  apellido_paterno    String
+  apellido_materno    String
+  telefono            String?
+  direccion           String?
+  fecha_nacimiento    DateTime
+  sexo                SexoPersona
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  // Relaciones
+  Usuario             Usuario?
+  Estudiante          Estudiante?
+}
+
+enum SexoPersona {
+  Masculino
+  Femenino
+}
+
+
+enum RolUsuario {
+  Usuario
+  Docente
+  Auxiliar
+  Secretaria
+  Innovacion
+  Subdirector
+  Director
+  Administrador
+}
+
+model Usuario {
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  password            String
+  rol                 RolUsuario
+  avatar              String?
+  estado              Boolean  @default(true)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  
+  // Relaciones
+  Persona_id          Int      @unique
+  Persona             Persona  @relation(fields: [Persona_id], references: [id])
+
+  // Un usuario puede ser tutor de varios Grados Académicos
+  GradoAcademicoTutorado GradoAcademico[]
+  
+  DocenteCurso        DocenteCurso[]
+
+  // Relaciones con Justificaciones
+  JustificacionesComoSecretaria Justificacion[] @relation("SecretariaJustificacion")
+  JustificacionesComoDirector   Justificacion[] @relation("DirectorJustificacion")
+
+  // Relaciones con Noticias y Eventos
+  NoticiasCreadas     Entrada[]
+}
+
+model Estudiante {
+  id                  Int      @id @default(autoincrement())
+  codigo_matricula    String   @unique
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  
+  // Relaciones
+  persona_id          Int      @unique
+  Persona             Persona  @relation(fields: [persona_id], references: [id])
+  
+  gradoAcademico_id   Int
+  GradoAcademico      GradoAcademico @relation(fields: [gradoAcademico_id], references: [id])
+
+  asistencias         Asistencia[]
+  Justificacion       Justificacion[]
+  Notificacion        Notificacion[]
+}
+
+model Aula {
+  id                  Int      @id @default(autoincrement())
+  edificio            Int
+  piso                Int
+  numeroAula          Int
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  // Relaciones
+  GradoAcademico      GradoAcademico[]
+}
+
+
+enum GradoAc {
+  Primero
+  Segundo
+  Tercero
+  Cuarto
+  Quinto
+}
+enum TurnoAc {
+  Dia
+  Tarde
+}
+
+model GradoAcademico {
+  id                  Int      @id @default(autoincrement())
+  grado               GradoAc
+  seccion             String
+  tutor_id            Int
+  tutor               Usuario  @relation(fields: [tutor_id], references: [id])
+  aula_id             Int
+  aula                Aula     @relation(fields: [aula_id], references: [id])
+  turno               TurnoAc
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  // Relaciones
+  Estudiante          Estudiante[]
+  Horario             Horario[]
+}
+
+
+model Curso {
+  id                  Int      @id @default(autoincrement())
+  area                String   @unique
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  // Relaciones
+  DocenteCurso        DocenteCurso[]
+  Horario             Horario[]  // Cambio: muchos horarios pueden estar relacionados con un curso
+  asistencias         Asistencia[]
+}
+
+model DocenteCurso {
+  id                  Int      @id @default(autoincrement())
+  
+  docente_id          Int
+  docente             Usuario  @relation(fields: [docente_id], references: [id])  // Relación uno a uno
+
+  curso_id            Int
+  curso               Curso    @relation(fields: [curso_id], references: [id])    // Relación uno a uno
+
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
+
+
+enum DiaH {
+  Lunes
+  Martes
+  Miercoles
+  Jueves
+  Viernes
+}
+
+model Horario {
+  id                  Int      @id @default(autoincrement())
+  
+  gradoAcademico_id   Int
+  gradoAcademico      GradoAcademico @relation(fields: [gradoAcademico_id], references: [id])
+
+  curso_id            Int
+  curso               Curso    @relation(fields: [curso_id], references: [id])
+
+  dia                 DiaH
+  horaInicio          String
+  horaFin             String
+}
+
+enum EstadoAsis {
+  Presente
+  Tardanza
+  Falta
+  Justicado
+}
+
+model Asistencia {
+  id                 Int      @id @default(autoincrement())
+  fecha              DateTime @default(now())
+  
+  curso_id           Int
+  curso              Curso @relation(fields: [curso_id], references: [id])
+  
+  estudiante_id      Int
+  estudiante         Estudiante @relation(fields: [estudiante_id], references: [id])
+
+  estadoAsistencia   EstadoAsis  // Renombrado para mayor claridad
+}
+
+
+enum TipoJust {
+  JUSTIFICACION
+  ACTIVIDADEXTRACURRICULAR
+}
+
+enum EstadoResolucion {
+  PENDIENTE
+  APROBADO
+  RECHAZADO
+}
+
+model Resolucion {
+  id                Int      @id @default(autoincrement())
+  fecha             DateTime
+  estado            EstadoResolucion
+  documento_url     String
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  // Relaciones
+  Justificacion     Justificacion?
+}
+
+model Justificacion {
+  id                 Int      @id @default(autoincrement())
+  fecha_inicio       DateTime
+  fecha_fin          DateTime
+  tipo_justificacion TipoJust
+  motivo             String   // Breve descripción del motivo de la justificación
+  resolucion_id      Int @unique
+  resolucion         Resolucion @relation(fields: [resolucion_id], references: [id])
+
+  estado             EstadoJustificacion @default(Pendiente)
+
+  estudiante_id      Int
+  estudiante         Estudiante @relation(fields: [estudiante_id], references: [id])
+
+  secretaria_id      Int
+  secretaria         Usuario   @relation(fields: [secretaria_id], references: [id], name: "SecretariaJustificacion")
+
+  director_id        Int?      // Puede ser obligatorio si lo decides
+  director           Usuario?  @relation(fields: [director_id], references: [id], name: "DirectorJustificacion")
+
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
+
+
+}
+
+enum EstadoJustificacion {
+  Pendiente
+  Aprobado
+  Rechazado
+}
+
+
+model Notificacion {
+  id                 Int      @id @default(autoincrement())
+  fecha              DateTime @default(now())
+  mensaje            String
+  enviado            Boolean  @default(false)
+  estudiante_id      Int
+  estudiante         Estudiante @relation(fields: [estudiante_id], references: [id])
+}
+
+
+enum TipoEntrada {
+  Noticia
+  Comunicado
+  Evento
+}
+
+model Entrada {
+  id                 Int      @id @default(autoincrement())
+  titulo             String
+  portada_url        String
+  contenido          String
+  usuario_id         Int
+  usuario            Usuario @relation(fields: [usuario_id], references: [id])
+  tipo_entrada       TipoEntrada
+  fecha              DateTime @default(now())
+  estado_entrada     Boolean  @default(true)
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
