@@ -9,10 +9,11 @@ import { EntradasModule } from './entradas/entradas.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: join(__dirname, '..', '..', '/uploads'),
       serveRoot: '/uploads',
-    }), AuthModule, PersonasModule, UsuariosModule, EntradasModule],
+    }),
+    AuthModule, PersonasModule, UsuariosModule, EntradasModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

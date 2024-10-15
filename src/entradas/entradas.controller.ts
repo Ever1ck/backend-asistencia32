@@ -7,12 +7,15 @@ import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { promises as fs } from 'fs';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { RolUsuario } from '@prisma/client';
 
 @ApiTags('entradas')
 @Controller('entradas')
 export class EntradasController {
   constructor(private readonly entradasService: EntradasService) {}
 
+  @Auth(RolUsuario.Usuario)
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
@@ -51,11 +54,13 @@ export class EntradasController {
     return this.entradasService.findOne(id);
   }
 
+  @Auth(RolUsuario.Usuario)
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateEntradaDto: UpdateEntradaDto) {
     return this.entradasService.update(id, updateEntradaDto);
   }
 
+  @Auth(RolUsuario.Usuario)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.entradasService.remove(id);

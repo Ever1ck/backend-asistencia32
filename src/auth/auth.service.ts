@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 
 export const roundsOfHashing = 10;
 
-
 @Injectable()
 export class AuthService {
 
@@ -30,7 +29,7 @@ export class AuthService {
       throw new UnauthorizedException('Contraseña Invalida');
     }
 
-    const payload = { userId: user.id };
+    const payload = { usuarioId: user.id, rol: user.rol };
     // Step 3: Generate a JWT containing the user's ID and return it
 
     const token = this.jwtService.sign(payload);
@@ -97,7 +96,7 @@ export class AuthService {
         },
       });
 
-      const payload = { userId: user.id, rol: user.rol };
+      const payload = { usuarioId: user.id, rol: user.rol };
       const token = this.jwtService.sign(payload);
 
       return {
@@ -107,15 +106,22 @@ export class AuthService {
     });
   }
 
-  async profile(user: { email: string; rol: string; }) {
+  async profile(usuario: { email: string; rol: string; }) {
+    if (!usuario) {
+      throw new BadRequestException('El objeto usuario no puede ser undefined');
+    }
+  
     const userWithPersona = await this.prisma.usuario.findUnique({
-      where: { email: user.email },
+      where: { email: usuario.email },
       include: { Persona: true },
     });
+  
     if (!userWithPersona) {
-      throw new NotFoundException(`Usuario no encontrado: ${user.email}`);
+      throw new NotFoundException(`Usuario no encontrado: ${usuario.email}`);
     }
+  
     return {
+      id: userWithPersona.id,
       email: userWithPersona.email,
       rol: userWithPersona.rol,
       avatar: userWithPersona.avatar,

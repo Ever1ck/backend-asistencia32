@@ -13,7 +13,16 @@ export class EntradasService {
   }
 
   findAll() {
-    return this.prisma.entrada.findMany({ where: { estado_entrada: true }, include: { usuario: true } });
+    return this.prisma.entrada.findMany({
+      where: { estado_entrada: true },
+      include: {
+        usuario: {
+          select: {
+            rol: true
+          }
+        }
+      }
+    });
   }
 
   findOne(id: number) {
