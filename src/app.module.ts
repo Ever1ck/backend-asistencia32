@@ -7,10 +7,11 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { EntradasModule } from './entradas/entradas.module';
 
 @Module({
-  imports: [ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'uploads'),
-    serveRoot: '/uploads',
-  }), AuthModule, PersonasModule, UsuariosModule, EntradasModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }), AuthModule, PersonasModule, UsuariosModule, EntradasModule],
   controllers: [],
   providers: [],
 })

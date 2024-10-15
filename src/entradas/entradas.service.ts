@@ -2,36 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateEntradaDto } from './dto/create-entrada.dto';
 import { UpdateEntradaDto } from './dto/update-entrada.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { EntradaEntity } from './entities/entrada.entity';
-import * as path from 'path';
 
 @Injectable()
 export class EntradasService {
 
   constructor( private prisma:PrismaService ) {}
 
-  async create(createEntradaDto: CreateEntradaDto, file: Express.Multer.File): Promise<EntradaEntity> {
-    const { titulo, contenido, usuario_id, tipo_entrada } = createEntradaDto;
-    
-    // Obtener la extensión del archivo
-    const fileExtension = path.extname(file.originalname);
-    
-    // Generar un nombre único para la imagen, conservando su extensión
-    const uniqueFileName = `${new Date().getTime()}${fileExtension}`;
-    
-    const portada_url = `/uploads/entradas/${usuario_id}/${uniqueFileName}`;
-    const fecha = new Date();
-
-    return this.prisma.entrada.create({
-      data: {
-        titulo,
-        contenido,
-        usuario_id,
-        tipo_entrada,
-        portada_url,
-        fecha,
-      },
-    });
+  create(createEntradaDto: CreateEntradaDto) {
+    return this.prisma.entrada.create({ data: createEntradaDto });
   }
 
   findAll() {
@@ -39,20 +17,14 @@ export class EntradasService {
   }
 
   findOne(id: number) {
-    return this.prisma.entrada.findUnique({ where: { id } });
+    return this.prisma.entrada.findUnique({ where: { id }, include: { usuario: true } });
   }
 
   update(id: number, updateEntradaDto: UpdateEntradaDto) {
-    return this.prisma.entrada.update({
-      where: { id },
-      data: updateEntradaDto,
-      });
+    return this.prisma.entrada.update({ where: { id }, data: updateEntradaDto });
   }
 
   remove(id: number) {
-    return this.prisma.entrada.update({
-      where: { id },
-      data: { estado_entrada: false },
-      });
+    return this.prisma.entrada.update({ where: { id }, data: { estado_entrada: false } });
   }
 }

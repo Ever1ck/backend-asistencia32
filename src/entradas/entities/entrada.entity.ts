@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Entrada, TipoEntrada } from "@prisma/client";
+import { $Enums, Entrada, TipoEntrada } from "@prisma/client";
 
-export class EntradaEntity implements Entrada{
-    
+export class EntradaEntity implements Entrada  {
+
     @ApiProperty()
     id: number;
 
@@ -10,15 +10,15 @@ export class EntradaEntity implements Entrada{
     titulo: string;
 
     @ApiProperty()
-    contenido: string;
+    portada_url: string;
 
     @ApiProperty()
-    portada_url: string;
+    contenido: string;
 
     @ApiProperty()
     usuario_id: number;
 
-    @ApiProperty({enum: TipoEntrada})
+    @ApiProperty({enum:TipoEntrada})
     tipo_entrada: TipoEntrada;
 
     @ApiProperty()
@@ -29,7 +29,7 @@ export class EntradaEntity implements Entrada{
 
     @ApiProperty()
     created_at: Date;
-    
+
     @ApiProperty()
     updated_at: Date;
 

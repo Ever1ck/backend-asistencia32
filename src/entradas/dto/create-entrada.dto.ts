@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { TipoEntrada } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsEnum, IsInt, IsString } from "class-validator";
+import { IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateEntradaDto {
 
@@ -9,8 +9,11 @@ export class CreateEntradaDto {
     @IsString()
     titulo: string;
 
-    @ApiProperty({ type: 'string', format: 'binary', required: true })
-    file: any;
+    @ApiProperty( { type: 'string', format: 'binary' })
+    file: Express.Multer.File;
+
+    @IsOptional()
+    portada_url: string; // Hacer que sea opcional
 
     @ApiProperty()
     @IsString()
@@ -21,8 +24,7 @@ export class CreateEntradaDto {
     @Type(() => Number)
     usuario_id: number;
 
-    @ApiProperty({enum:TipoEntrada})
+    @ApiProperty({enum: TipoEntrada})
     @IsEnum(TipoEntrada)
     tipo_entrada: TipoEntrada;
-
 }
