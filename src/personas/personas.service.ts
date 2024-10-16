@@ -13,11 +13,13 @@ export class PersonasService {
   }
 
   findAll() {
-    return `This action returns all personas`;
+    return this.prisma.persona.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} persona`;
+    return this.prisma.persona.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updatePersonaDto: UpdatePersonaDto) {

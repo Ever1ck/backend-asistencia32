@@ -49,6 +49,11 @@ export class EntradasController {
     return this.entradasService.findAll();
   }
 
+  @Get('eventos')
+  findEvents() {
+    return this.entradasService.findEvents();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.entradasService.findOne(id);

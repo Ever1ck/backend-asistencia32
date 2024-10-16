@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SexoPersona } from "@prisma/client";
-import { IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { IsDate, IsDateString, IsEnum, IsNotEmpty, IsString, MaxLength } from "class-validator";
 
 export class CreatePersonaDto {
 
@@ -31,8 +31,10 @@ export class CreatePersonaDto {
     direccion: string;
 
     @ApiProperty()
+    @IsDateString()
     fecha_nacimiento: Date;
 
-    @ApiProperty( {enum: [SexoPersona]} )
+    @ApiProperty( {enum: SexoPersona} )
+    @IsEnum(SexoPersona)
     sexo: SexoPersona;
 }

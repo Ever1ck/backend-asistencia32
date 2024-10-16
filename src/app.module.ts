@@ -5,6 +5,11 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { EntradasModule } from './entradas/entradas.module';
+import { EstudiantesModule } from './estudiantes/estudiantes.module';
+import { AulasModule } from './aulas/aulas.module';
+import { GradosacademicosModule } from './gradosacademicos/gradosacademicos.module';
+import { DocentesModule } from './docentes/docentes.module';
+import { Docentescurso } from './docentescursos/entities/docentescurso.entity';
 
 @Module({
   imports: [
@@ -12,7 +17,7 @@ import { EntradasModule } from './entradas/entradas.module';
       rootPath: join(__dirname, '..', '..', '/uploads'),
       serveRoot: '/uploads',
     }),
-    AuthModule, PersonasModule, UsuariosModule, EntradasModule],
+    AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, Docentescurso],
   controllers: [],
   providers: [],
 })

@@ -25,6 +25,19 @@ export class EntradasService {
     });
   }
 
+  findEvents() {
+    return this.prisma.entrada.findMany({
+      where: { estado_entrada: true, tipo_entrada: 'Evento' },
+      include: {
+        usuario: {
+          select: {
+            rol: true
+          }
+        }
+      }
+    });
+  }
+
   findOne(id: number) {
     return this.prisma.entrada.findUnique({ where: { id }, include: { usuario: true } });
   }
