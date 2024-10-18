@@ -61,7 +61,26 @@ export class EntradasController {
 
   @Auth(RolUsuario.Usuario)
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateEntradaDto: UpdateEntradaDto) {
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/entradas',
+        filename: async (req, file, callback) => {
+          const dir = './uploads/entradas';
+          const files = await fs.readdir(dir);
+          const portadaFiles = files.filter(file => file.startsWith('Portada_'));
+          let newIndex = portadaFiles.length + 1;
+          const newFileName = `Portada_${newIndex}${extname(file.originalname)}`;
+          callback(null, newFileName);
+        },
+      }),
+    }),
+  )
+  async update(@Param('id', ParseIntPipe) id: number, @UploadedFile() file: Express.Multer.File, @Body() updateEntradaDto: UpdateEntradaDto) {
+    if (file) {
+      updateEntradaDto.portada_url = `uploads/entradas/${file.filename}`;
+    }
     return this.entradasService.update(id, updateEntradaDto);
   }
 

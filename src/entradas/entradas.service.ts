@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEntradaDto } from './dto/create-entrada.dto';
 import { UpdateEntradaDto } from './dto/update-entrada.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -42,8 +42,21 @@ export class EntradasService {
     return this.prisma.entrada.findUnique({ where: { id }, include: { usuario: true } });
   }
 
-  update(id: number, updateEntradaDto: UpdateEntradaDto) {
-    return this.prisma.entrada.update({ where: { id }, data: updateEntradaDto });
+  async update(id: number, updateEntradaDto: UpdateEntradaDto) {
+    // Verificar si el usuario_id existe
+    if (updateEntradaDto.usuario_id) {
+      const usuario = await this.prisma.usuario.findUnique({
+        where: { id: updateEntradaDto.usuario_id },
+      });
+      if (!usuario) {
+        throw new NotFoundException(`Usuario con id ${updateEntradaDto.usuario_id} no encontrado`);
+      }
+    }
+
+    return this.prisma.entrada.update({
+      where: { id },
+      data: updateEntradaDto,
+    });
   }
 
   remove(id: number) {
