@@ -28,3 +28,15 @@ export class RolesGuard implements CanActivate {
     return requiredRoles.some((rol) => user.rol?.includes(rol));
   }
 }
+
+export class AllGuard implements CanActivate {
+
+  constructor(private readonly reflector: Reflector) { }
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean {
+    // Permitir acceso a todos los usuarios
+    return true;
+  }
+}

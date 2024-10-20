@@ -5,7 +5,7 @@ import { AuthEntity } from './entities/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RolUsuario } from '@prisma/client';
-import { Auth } from './decorators/auth.decorator';
+import { AllAuth, Auth } from './decorators/auth.decorator';
 import { ActiveUsuario } from 'src/common/decorators/active-user.decorator';
 
 @ApiTags('auth')
@@ -26,14 +26,14 @@ export class AuthController {
   }
 
   @Get('profile')
-  @Auth(RolUsuario.Usuario) 
+  @AllAuth(RolUsuario.Usuario)
   @ApiBearerAuth()
   profile(@ActiveUsuario() usuario) {
     return this.authService.profile(usuario);
   }
 
   @Patch('profile')
-  @Auth(RolUsuario.Usuario)
+  @AllAuth(RolUsuario.Usuario)
   @ApiBearerAuth()
   updateProfile( @ActiveUsuario() usuario, @Body() data ) {
     return this.authService.updateProfile(usuario, data);

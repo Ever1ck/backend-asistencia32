@@ -63,7 +63,7 @@ async function main() {
       email: 'ever1ever14@gmail.com',
       password: passwordadmin,
       rol: 'Administrador',
-      avatar: 'https://media.discordapp.net/attachments/735886562524528640/1293965831021002884/sexy_android_21_by_hphuc_dd2fazb-fullview.jpg?ex=67094b16&is=6707f996&hm=16a9984b597cf0a328e46b292e1ea626e9abc88b21d8ed1a0e6bbe56bf4deb52&=&format=webp&width=818&height=662',
+      avatar: 'https://media.discordapp.net/attachments/735886562524528640/1293965831021002884/sexy_android_21_by_hphuc_dd2fazb-fullview.jpg?ex=67167a16&is=67152896&hm=50a11c4559315ac63ad1194ab54b83096a20ce10d2103929437edb030d50e47f&=&format=webp&width=818&height=662',
       Persona: {
         connect: { id: persona1.id },
       },
