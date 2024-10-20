@@ -2,7 +2,7 @@
 CREATE TYPE "SexoPersona" AS ENUM ('Masculino', 'Femenino');
 
 -- CreateEnum
-CREATE TYPE "RolUsuario" AS ENUM ('Docente', 'Auxiliar', 'Secretaria', 'Innovacion', 'Subdirector', 'Director', 'Administrador');
+CREATE TYPE "RolUsuario" AS ENUM ('Usuario', 'Docente', 'Auxiliar', 'Secretaria', 'Innovacion', 'Subdirector', 'Director', 'Administrador');
 
 -- CreateEnum
 CREATE TYPE "GradoAc" AS ENUM ('Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto');
@@ -24,6 +24,9 @@ CREATE TYPE "EstadoResolucion" AS ENUM ('PENDIENTE', 'APROBADO', 'RECHAZADO');
 
 -- CreateEnum
 CREATE TYPE "EstadoJustificacion" AS ENUM ('Pendiente', 'Aprobado', 'Rechazado');
+
+-- CreateEnum
+CREATE TYPE "TipoEntrada" AS ENUM ('Noticia', 'Comunicado', 'Evento');
 
 -- CreateTable
 CREATE TABLE "Persona" (
@@ -180,6 +183,22 @@ CREATE TABLE "Notificacion" (
     CONSTRAINT "Notificacion_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Entrada" (
+    "id" SERIAL NOT NULL,
+    "titulo" TEXT NOT NULL,
+    "portada_url" TEXT NOT NULL,
+    "contenido" TEXT NOT NULL,
+    "usuario_id" INTEGER NOT NULL,
+    "tipo_entrada" "TipoEntrada" NOT NULL,
+    "fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "estado_entrada" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Entrada_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Persona_dni_key" ON "Persona"("dni");
 
@@ -248,3 +267,6 @@ ALTER TABLE "Justificacion" ADD CONSTRAINT "Justificacion_director_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "Notificacion" ADD CONSTRAINT "Notificacion_estudiante_id_fkey" FOREIGN KEY ("estudiante_id") REFERENCES "Estudiante"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Entrada" ADD CONSTRAINT "Entrada_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "Usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

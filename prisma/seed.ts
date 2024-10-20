@@ -45,6 +45,18 @@ async function main() {
       fecha_nacimiento: new Date('1965-07-11'),
     },
   });
+  const persona4 = await prisma.persona.create({
+    data: {
+      dni: '76854321',
+      nombres: 'Brayhan Snik',
+      apellido_paterno: 'Fernandes',
+      apellido_materno: 'Ramos',
+      telefono: '979916388',
+      direccion: 'Av. El Maestro 566',
+      sexo: 'Masculino',
+      fecha_nacimiento: new Date('1965-07-11'),
+    },
+  });
   // Crear Usuarios
   const usuario1 = await prisma.usuario.create({
     data: {
@@ -77,6 +89,47 @@ async function main() {
       Persona: {
         connect: { id: persona3.id },
       },
+    },
+  });
+
+
+  const aula1 = await prisma.aula.create({
+    data: {
+      edificio: 1,
+      piso: 1,
+      numeroAula: 101,
+    },
+  });
+  const aula2 = await prisma.aula.create({
+    data: {
+      edificio: 1,
+      piso: 1,
+      numeroAula: 102,
+    },
+  });
+  const aula3 = await prisma.aula.create({
+    data: {
+      edificio: 1,
+      piso: 1,
+      numeroAula: 103,
+    },
+  });
+
+  const gradoacademico1 = await prisma.gradoAcademico.create({
+    data: {
+      grado: 'Primero',
+      seccion: 'A',
+      tutor_id: usuario2.id,
+      aula_id: aula1.id,
+      turno: 'Dia',
+    },
+  });
+
+  const estudiante1 = await prisma.estudiante.create({
+    data: {
+      codigo_matricula: '2020-14019',
+      persona_id: persona4.id,
+      gradoAcademico_id: gradoacademico1.id,
     },
   });
 
