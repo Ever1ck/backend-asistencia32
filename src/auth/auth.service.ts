@@ -18,7 +18,7 @@ export class AuthService {
 
     // If no user is found, throw an error
     if (!user) {
-      throw new NotFoundException(`Correo electronico incorrecto: ${email}`);
+      throw new NotFoundException(`Correo electronico invalido`);
     }
 
     // Step 2: Check if the password is correct
