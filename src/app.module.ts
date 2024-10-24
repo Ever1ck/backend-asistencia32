@@ -9,7 +9,9 @@ import { EstudiantesModule } from './estudiantes/estudiantes.module';
 import { AulasModule } from './aulas/aulas.module';
 import { GradosacademicosModule } from './gradosacademicos/gradosacademicos.module';
 import { DocentesModule } from './docentes/docentes.module';
-import { Docentescurso } from './docentescursos/entities/docentescurso.entity';
+import { CursosModule } from './cursos/cursos.module';
+import { DocentecursosModule } from './docentecursos/docentecursos.module';
+import { HorariosModule } from './horarios/horarios.module';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { Docentescurso } from './docentescursos/entities/docentescurso.entity';
       rootPath: join(__dirname, '..', '..', '/uploads'),
       serveRoot: '/uploads',
     }),
-    AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, Docentescurso],
+    AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, CursosModule, DocentecursosModule, HorariosModule],
   controllers: [],
   providers: [],
 })

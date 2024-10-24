@@ -167,6 +167,21 @@ enum DiaH {
   Viernes
 }
 
+enum HoraH {
+  Primera_Hora
+  Segunda_Hora
+  Tercera_Hora
+  Cuarta_Hora
+  Quinta_Hora
+  Sexta_Hora
+  Septima_Hora
+}
+
+enum TurnoH {
+  Dia
+  Tarde
+}
+
 model Horario {
   id                  Int      @id @default(autoincrement())
   
@@ -176,9 +191,9 @@ model Horario {
   curso_id            Int
   curso               Curso    @relation(fields: [curso_id], references: [id])
 
+  turno               TurnoH
   dia                 DiaH
-  horaInicio          String
-  horaFin             String
+  horas               HoraH
 }
 
 enum EstadoAsis {

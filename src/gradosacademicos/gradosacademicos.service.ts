@@ -76,13 +76,77 @@ export class GradosacademicosService {
             numeroAula: true,
           },
         },
+        Horario: {
+          select: {
+            id: true,
+            gradoAcademico_id: true,
+            curso: {
+              select: {
+                id: true,
+                area: true,
+              }
+            },
+            turno: true,
+            dia: true,
+            horaInicio: true,
+            horaFin: true,
+          }
+        }
       },
     });
   }
 
   findOne(id: number) {
     return this.prisma.gradoAcademico.findUnique({ 
-      where: { id: id } 
+      where: { id: id },
+      include: {
+        tutor: {
+          select: {
+            Persona: {
+              select: {
+                nombres: true,
+                apellido_paterno: true,
+                apellido_materno: true,
+              },
+            },
+          },
+        },
+        aula: {
+          select: {
+            edificio: true,
+            piso: true,
+            numeroAula: true,
+          },
+        },
+        Estudiante: {
+          select: {
+            id: true,
+            Persona: {
+              select: {
+                nombres: true,
+                apellido_paterno: true,
+                apellido_materno: true,
+              },
+            },
+          },
+        },
+        Horario: {
+          select: {
+            id: true,
+            gradoAcademico_id: true,
+            curso: {
+              select: {
+                id: true,
+                area: true,
+              }
+            },
+            turno: true,
+            dia: true,
+            horaInicio: true,
+            horaFin: true,
+          }
+        }
+      },
     });
   }
 
