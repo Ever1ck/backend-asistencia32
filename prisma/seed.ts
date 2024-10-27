@@ -54,7 +54,31 @@ async function main() {
       telefono: '979916388',
       direccion: 'Av. El Maestro 566',
       sexo: 'Masculino',
-      fecha_nacimiento: new Date('1965-07-11'),
+      fecha_nacimiento: new Date('2002-05-16'),
+    },
+  });
+  const persona5 = await prisma.persona.create({
+    data: {
+      dni: '72496996',
+      nombres: 'Jean Lui',
+      apellido_paterno: 'Zabala',
+      apellido_materno: 'Melendez',
+      telefono: '979916388',
+      direccion: 'Av. El Maestro 566',
+      sexo: 'Masculino',
+      fecha_nacimiento: new Date('2001-07-12'),
+    },
+  });
+  const persona6 = await prisma.persona.create({
+    data: {
+      dni: '72496997',
+      nombres: 'Maricarmen',
+      apellido_paterno: 'Tapia',
+      apellido_materno: 'Calsin',
+      telefono: '979916388',
+      direccion: 'Av. El Maestro 566',
+      sexo: 'Femenino',
+      fecha_nacimiento: new Date('2002-07-10'),
     },
   });
   // Crear Usuarios
@@ -115,6 +139,79 @@ async function main() {
     },
   });
 
+
+  const area1 = await prisma.area.create({
+    data: {
+      nombrearea: "Matematica",
+    },
+  });
+
+  const area2 = await prisma.area.create({
+    data: {
+      nombrearea: "Comunicacion",
+    },
+  });
+  const area3 = await prisma.area.create({
+    data: {
+      nombrearea: "Arte",
+    },
+  });
+  const area4 = await prisma.area.create({
+    data: {
+      nombrearea: "Educacion para el trabajo",
+    },
+  });
+  const area5 = await prisma.area.create({
+    data: {
+      nombrearea: "Educacion Fisica",
+    },
+  });
+  const area6 = await prisma.area.create({
+    data: {
+      nombrearea: "Educacion Religiosa",
+    },
+  });
+  const area7 = await prisma.area.create({
+    data: {
+      nombrearea: "Ciencia y Ambiente",
+    },
+  });
+
+  const curso1 = await prisma.curso.create({
+    data: {
+      areaid: 1,
+    },
+  });
+  const curso2 = await prisma.curso.create({
+    data: {
+      areaid: 2,
+    },
+  });
+  const curso3 = await prisma.curso.create({
+    data: {
+      areaid: 3,
+    },
+  });
+  const curso4 = await prisma.curso.create({
+    data: {
+      areaid: 4,
+    },
+  });
+  const curso5 = await prisma.curso.create({
+    data: {
+      areaid: 5,
+    },
+  }); 
+
+
+  const docentecurso1 = await prisma.docenteCurso.create({
+    data: {
+      docente_id: 2,
+      curso_id: 5,
+    },
+  });
+
+
   const gradoacademico1 = await prisma.gradoAcademico.create({
     data: {
       grado: 'Primero',
@@ -129,6 +226,21 @@ async function main() {
     data: {
       codigo_matricula: '2020-14019',
       persona_id: persona4.id,
+      gradoAcademico_id: gradoacademico1.id,
+    },
+  });
+
+  const estudiante2 = await prisma.estudiante.create({
+    data: {
+      codigo_matricula: '2020-14020',
+      persona_id: persona5.id,
+      gradoAcademico_id: gradoacademico1.id,
+    },
+  });
+  const estudiante3 = await prisma.estudiante.create({
+    data: {
+      codigo_matricula: '2020-14021',
+      persona_id: persona6.id,
       gradoAcademico_id: gradoacademico1.id,
     },
   });

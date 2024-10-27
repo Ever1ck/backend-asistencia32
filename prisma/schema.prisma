@@ -74,6 +74,13 @@ model Usuario {
   NoticiasCreadas     Entrada[]
 }
 
+model Modulo {
+  id                  Int      @id @default(autoincrement())
+  rol                 RolUsuario @unique
+  modulos             String[]
+}
+
+
 model Estudiante {
   id                  Int      @id @default(autoincrement())
   codigo_matricula    String   @unique
@@ -132,10 +139,17 @@ model GradoAcademico {
   Horario             Horario[]
 }
 
+model Area {
+  id                  Int      @id @default(autoincrement())
+  nombrearea          String   @unique
+  cursos              Curso[]
+}
+
 
 model Curso {
   id                  Int      @id @default(autoincrement())
-  area                String   @unique
+  areaid              Int
+  area                Area     @relation(fields: [areaid], references: [id])
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
 
@@ -193,7 +207,7 @@ model Horario {
 
   turno               TurnoH
   dia                 DiaH
-  horas               HoraH
+  horas               HoraH[]
 }
 
 enum EstadoAsis {
@@ -296,7 +310,9 @@ model Entrada {
   usuario_id         Int
   usuario            Usuario @relation(fields: [usuario_id], references: [id])
   tipo_entrada       TipoEntrada
+  tags               String[]
   fecha              DateTime @default(now())
+  fecha_evento       DateTime?
   estado_entrada     Boolean  @default(true)
   created_at         DateTime @default(now())
   updated_at         DateTime @updatedAt

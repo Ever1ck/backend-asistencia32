@@ -28,11 +28,6 @@ export class CreateHorarioDto {
     @ApiProperty( {enum: HoraH} )
     @IsEnum( HoraH )
     @IsNotEmpty()
-    horaInicio: HoraH;
-
-    @ApiProperty( {enum: HoraH} )
-    @IsEnum( HoraH )
-    @IsNotEmpty()
-    horaFin: HoraH;
+    horas: HoraH[];
 
 }

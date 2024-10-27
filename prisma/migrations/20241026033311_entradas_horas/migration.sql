@@ -14,6 +14,12 @@ CREATE TYPE "TurnoAc" AS ENUM ('Dia', 'Tarde');
 CREATE TYPE "DiaH" AS ENUM ('Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes');
 
 -- CreateEnum
+CREATE TYPE "HoraH" AS ENUM ('Primera_Hora', 'Segunda_Hora', 'Tercera_Hora', 'Cuarta_Hora', 'Quinta_Hora', 'Sexta_Hora', 'Septima_Hora');
+
+-- CreateEnum
+CREATE TYPE "TurnoH" AS ENUM ('Dia', 'Tarde');
+
+-- CreateEnum
 CREATE TYPE "EstadoAsis" AS ENUM ('Presente', 'Tardanza', 'Falta', 'Justicado');
 
 -- CreateEnum
@@ -124,9 +130,9 @@ CREATE TABLE "Horario" (
     "id" SERIAL NOT NULL,
     "gradoAcademico_id" INTEGER NOT NULL,
     "curso_id" INTEGER NOT NULL,
+    "turno" "TurnoH" NOT NULL,
     "dia" "DiaH" NOT NULL,
-    "horaInicio" TEXT NOT NULL,
-    "horaFin" TEXT NOT NULL,
+    "horas" "HoraH"[],
 
     CONSTRAINT "Horario_pkey" PRIMARY KEY ("id")
 );
@@ -191,7 +197,9 @@ CREATE TABLE "Entrada" (
     "contenido" TEXT NOT NULL,
     "usuario_id" INTEGER NOT NULL,
     "tipo_entrada" "TipoEntrada" NOT NULL,
+    "tags" TEXT[],
     "fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "fecha_evento" TIMESTAMP(3),
     "estado_entrada" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

@@ -88,8 +88,7 @@ export class GradosacademicosService {
             },
             turno: true,
             dia: true,
-            horaInicio: true,
-            horaFin: true,
+            horas: true,
           }
         }
       },
@@ -142,8 +141,7 @@ export class GradosacademicosService {
             },
             turno: true,
             dia: true,
-            horaInicio: true,
-            horaFin: true,
+            horas: true,
           }
         }
       },

@@ -27,4 +27,8 @@ export class CreateEntradaDto {
     @ApiProperty({enum: TipoEntrada})
     @IsEnum(TipoEntrada)
     tipo_entrada: TipoEntrada;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    fecha_evento: Date;
 }

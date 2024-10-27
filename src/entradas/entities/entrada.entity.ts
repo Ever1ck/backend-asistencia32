@@ -22,7 +22,13 @@ export class EntradaEntity implements Entrada  {
     tipo_entrada: TipoEntrada;
 
     @ApiProperty()
+    tags: string[];
+
+    @ApiProperty()
     fecha: Date;
+
+    @ApiProperty()
+    fecha_evento: Date;
 
     @ApiProperty()
     estado_entrada: boolean;
