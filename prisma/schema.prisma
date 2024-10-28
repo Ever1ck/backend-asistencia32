@@ -66,6 +66,8 @@ model Usuario {
   
   DocenteCurso        DocenteCurso[]
 
+  Horario             Horario[]
+
   // Relaciones con Justificaciones
   JustificacionesComoSecretaria Justificacion[] @relation("SecretariaJustificacion")
   JustificacionesComoDirector   Justificacion[] @relation("DirectorJustificacion")
@@ -204,6 +206,9 @@ model Horario {
 
   curso_id            Int
   curso               Curso    @relation(fields: [curso_id], references: [id])
+
+  docente_id          Int
+  docente             Usuario  @relation(fields: [docente_id], references: [id])
 
   turno               TurnoH
   dia                 DiaH

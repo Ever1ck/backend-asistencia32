@@ -27,6 +27,17 @@ export class HorariosService {
             id: true,
             area: true,
           }
+        },
+        docente: {
+          select: {
+            Persona: {
+              select: {
+                nombres: true,
+                apellido_paterno: true,
+                apellido_materno: true,
+              }
+            }
+          }
         }
       }
     });

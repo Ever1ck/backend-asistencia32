@@ -14,6 +14,11 @@ export class CreateHorarioDto {
     @IsNotEmpty()
     curso_id: number;
 
+    @ApiProperty()
+    @IsInt()
+    @IsNotEmpty()
+    docente_id: number;
+
 
     @ApiProperty({ enum: TurnoH }) 
     @IsEnum( TurnoH )
