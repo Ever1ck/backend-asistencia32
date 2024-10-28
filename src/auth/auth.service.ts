@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthEntity } from './entities/auth.entity';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
+import { UpdateProfileDto } from './dto/update.dto';
 
 export const roundsOfHashing = 10;
 
@@ -110,16 +111,16 @@ export class AuthService {
     if (!usuario) {
       throw new BadRequestException('El objeto usuario no puede ser undefined');
     }
-  
+
     const userWithPersona = await this.prisma.usuario.findUnique({
       where: { email: usuario.email },
       include: { Persona: true },
     });
-  
+
     if (!userWithPersona) {
       throw new NotFoundException(`Usuario no encontrado: ${usuario.email}`);
     }
-  
+
     return {
       id: userWithPersona.id,
       email: userWithPersona.email,
@@ -129,28 +130,53 @@ export class AuthService {
     };
   }
 
-  async updateProfile(user: { email: string; rol: string; }, updateProfileDto: RegisterDto) {
+  async updateProfile(user: { email: string; rol: string; }, updateProfileDto: UpdateProfileDto) {
     const userWithPersona = await this.prisma.usuario.findUnique({
       where: { email: user.email },
       include: { Persona: true },
     });
+
     if (!userWithPersona) {
       throw new NotFoundException(`Usuario no encontrado: ${user.email}`);
     }
+
+    // Filtrar campos undefined
+    const dataToUpdate: any = {};
+    if (updateProfileDto.nombres !== undefined) dataToUpdate.nombres = updateProfileDto.nombres;
+    if (updateProfileDto.apellido_paterno !== undefined) dataToUpdate.apellido_paterno = updateProfileDto.apellido_paterno;
+    if (updateProfileDto.apellido_materno !== undefined) dataToUpdate.apellido_materno = updateProfileDto.apellido_materno;
+    if (updateProfileDto.direccion !== undefined) dataToUpdate.direccion = updateProfileDto.direccion;
+    if (updateProfileDto.dni !== undefined) dataToUpdate.dni = updateProfileDto.dni;
+    if (updateProfileDto.telefono !== undefined) dataToUpdate.telefono = updateProfileDto.telefono;
+    if (updateProfileDto.fecha_nacimiento !== undefined) {
+      const fechaNacimiento = new Date(updateProfileDto.fecha_nacimiento);
+      if (!isNaN(fechaNacimiento.getTime())) {
+        dataToUpdate.fecha_nacimiento = fechaNacimiento;
+      } else {
+        throw new BadRequestException('Fecha de nacimiento inválida');
+      }
+    }
+
+    // Filtrar campos undefined para Usuario
+    const userDataToUpdate: any = {};
+    if (updateProfileDto.email !== undefined) userDataToUpdate.email = updateProfileDto.email;
+    if (updateProfileDto.avatar !== undefined) userDataToUpdate.avatar = updateProfileDto.avatar;
+
     return await this.prisma.$transaction(async (prisma) => {
       const updatedPersona = await prisma.persona.update({
         where: { id: userWithPersona.Persona.id },
-        data: {
-          nombres: updateProfileDto.nombres,
-          apellido_paterno: updateProfileDto.apellido_paterno,
-          apellido_materno: updateProfileDto.apellido_materno,
-          fecha_nacimiento: new Date(updateProfileDto.fecha_nacimiento),
-        },
+        data: dataToUpdate,
       });
+
+      const updatedUser = await prisma.usuario.update({
+        where: { email: user.email },
+        data: userDataToUpdate,
+      });
+
       return {
-        email: userWithPersona.email,
-        rol: userWithPersona.rol,
-        avatar: userWithPersona.avatar,
+        email: updatedUser.email,
+        rol: updatedUser.rol,
+        avatar: updatedUser.avatar,
         persona: updatedPersona,
       };
     });

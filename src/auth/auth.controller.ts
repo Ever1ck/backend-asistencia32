@@ -5,12 +5,14 @@ import { AuthEntity } from './entities/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RolUsuario } from '@prisma/client';
-import { AllAuth, Auth } from './decorators/auth.decorator';
+import { AllAuth } from './decorators/auth.decorator';
 import { ActiveUsuario } from 'src/common/decorators/active-user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { promises as fs } from 'fs';
+import { ProfileEntity } from './entities/profile.entity';
+import { UpdateProfileDto } from './dto/update.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,7 +39,6 @@ export class AuthController {
   }
 
   @Patch('profile')
-  @ApiOkResponse()
   @AllAuth(RolUsuario.Usuario)
   @ApiBearerAuth()
   @UseInterceptors(
@@ -55,7 +56,11 @@ export class AuthController {
       }),
     }),
   )
-  updateProfile(@Param('id', ParseIntPipe) id: number, @UploadedFile() file: Express.Multer.File, @ActiveUsuario() usuario, @Body() data ) {
+  updateProfile(
+    @UploadedFile() file: Express.Multer.File,
+    @ActiveUsuario() usuario,
+    @Body() data: UpdateProfileDto
+  ) {
     if (file) {
       data.avatar = `uploads/profiles/${file.filename}`;
     }

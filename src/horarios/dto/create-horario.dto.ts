@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { DiaH, HoraH, TurnoAc, TurnoH } from "@prisma/client";
-import { IsEnum, IsInt, IsNotEmpty } from "class-validator";
+import { IsArray, IsEnum, IsInt, IsNotEmpty } from "class-validator";
 
 export class CreateHorarioDto {
 
@@ -25,8 +25,8 @@ export class CreateHorarioDto {
     @IsNotEmpty()
     dia: DiaH;
 
-    @ApiProperty( {enum: HoraH} )
-    @IsEnum( HoraH )
+    @ApiProperty( {isArray: true, enum:HoraH} )
+    @IsArray()
     @IsNotEmpty()
     horas: HoraH[];
 

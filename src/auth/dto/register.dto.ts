@@ -16,6 +16,9 @@ export class RegisterDto {
   password: string;
 
   @Exclude()
+  avatar: string
+
+  @Exclude()
   @IsEnum(RolUsuario)
   rol: RolUsuario = RolUsuario.Usuario
 

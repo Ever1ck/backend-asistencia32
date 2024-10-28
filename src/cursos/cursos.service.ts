@@ -15,6 +15,11 @@ export class CursosService {
   findAll() {
     return this.prisma.curso.findMany({
       include: {
+        area: {
+          select: {
+            nombrearea: true
+          }
+        },
         DocenteCurso: {
           include: {
             docente:
@@ -39,6 +44,11 @@ export class CursosService {
     return this.prisma.curso.findUnique({
       where: { id },
       include: {
+        area: {
+          select: {
+            nombrearea: true
+          }
+        },
         DocenteCurso: {
           include: {
             docente:

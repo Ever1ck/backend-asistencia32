@@ -7,18 +7,79 @@ import { RolUsuario } from '@prisma/client';
 @Injectable()
 export class DocentesService {
 
-  constructor(private prisma:PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   create(createDocenteDto: CreateDocenteDto) {
     return this.prisma.usuario.create({ data: createDocenteDto });
   }
 
   findAll() {
-    return this.prisma.usuario.findMany( { where: { rol: 'Docente' }, include: { Persona: true } });
+    return this.prisma.usuario.findMany({
+      where: { rol: 'Docente' },
+      include: {
+        Persona: {
+          select: {
+            nombres: true,
+            apellido_paterno: true,
+            apellido_materno: true,
+          },
+        },
+        DocenteCurso: {
+          include: {
+            curso: {
+              include: {
+                area: {
+                  select: {
+                    nombrearea: true
+                  }
+                },
+                Horario: {
+                  select: {
+                    dia: true,
+                    horas: true,
+                    gradoAcademico: {
+                      select: {
+                        grado: true,
+                        seccion: true,
+                        aula: {
+                          select: {
+                            edificio: true,
+                            piso: true,
+                          }
+                        },
+                        turno: true,
+                      }
+                    }
+                  },
+                }
+              }
+            },
+
+          }
+        }
+      }
+    });
   }
 
   findOne(id: number) {
-    return this.prisma.usuario.findUnique({ where: { id }, include: { Persona: true } });
+    return this.prisma.usuario.findUnique({
+      where: { id },
+      include: {
+        Persona: {
+          select: {
+            nombres: true,
+            apellido_paterno: true,
+            apellido_materno: true,
+            fecha_nacimiento: true,
+          },
+        },
+        DocenteCurso: {
+          include: {
+            curso: true
+          }
+        }
+      }
+    });
   }
 
   update(id: number, updateDocenteDto: UpdateDocenteDto) {
