@@ -3,9 +3,12 @@ import { GradosacademicosService } from './gradosacademicos.service';
 import { CreateGradosacademicoDto } from './dto/create-gradosacademico.dto';
 import { UpdateGradosacademicoDto } from './dto/update-gradosacademico.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { RolUsuario } from '@prisma/client';
 
 @ApiTags('gradosacademicos')
 @Controller('gradosacademicos')
+@Auth(RolUsuario.Docente)
 export class GradosacademicosController {
   constructor(private readonly gradosacademicosService: GradosacademicosService) {}
 

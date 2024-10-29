@@ -33,29 +33,31 @@ export class DocentesService {
                     nombrearea: true
                   }
                 },
-                Horario: {
-                  select: {
-                    dia: true,
-                    horas: true,
-                    gradoAcademico: {
-                      select: {
-                        grado: true,
-                        seccion: true,
-                        aula: {
-                          select: {
-                            edificio: true,
-                            piso: true,
-                          }
-                        },
-                        turno: true,
-                      }
-                    }
-                  },
-                }
+              },
+            }
+          }
+        },
+        Horario: {
+          select: {
+            dia: true,
+            horas: true,
+            gradoAcademico: {
+              select: {
+                grado: true,
+                seccion: true,
+                turno: true,
               }
             },
-
-          }
+            curso: {
+              select: {
+                area: {
+                  select: {
+                    nombrearea: true
+                  }
+                }
+              }
+            }
+          },
         }
       }
     });
