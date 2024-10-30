@@ -139,6 +139,7 @@ model GradoAcademico {
   // Relaciones
   Estudiante          Estudiante[]
   Horario             Horario[]
+  Asistencias         Asistencia[]
 }
 
 model Area {
@@ -229,6 +230,9 @@ model Asistencia {
   curso_id           Int
   curso              Curso @relation(fields: [curso_id], references: [id])
   
+  gradoAcademico_id  Int
+  gradoAcademico     GradoAcademico @relation(fields: [gradoAcademico_id], references: [id])
+
   estudiante_id      Int
   estudiante         Estudiante @relation(fields: [estudiante_id], references: [id])
 

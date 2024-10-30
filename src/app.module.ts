@@ -14,6 +14,7 @@ import { DocentecursosModule } from './docentecursos/docentecursos.module';
 import { HorariosModule } from './horarios/horarios.module';
 import { AreasModule } from './areas/areas.module';
 import { ModulosModule } from './modulos/modulos.module';
+import { AsistenciasModule } from './asistencias/asistencias.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ModulosModule } from './modulos/modulos.module';
       rootPath: join(__dirname, '..', '..', '/uploads'),
       serveRoot: '/uploads',
     }),
-    AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, CursosModule, DocentecursosModule, HorariosModule, AreasModule, ModulosModule],
+    AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, CursosModule, DocentecursosModule, HorariosModule, AreasModule, ModulosModule, AsistenciasModule],
   controllers: [],
   providers: [],
 })

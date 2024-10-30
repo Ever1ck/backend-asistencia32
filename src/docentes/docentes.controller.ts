@@ -4,6 +4,9 @@ import { CreateDocenteDto } from './dto/create-docente.dto';
 import { UpdateDocenteDto } from './dto/update-docente.dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { DocenteEntity } from './entities/docente.entity';
+import { ActiveUsuario } from 'src/common/decorators/active-user.decorator';
+import { RolUsuario } from '@prisma/client';
+import { AllAuth } from 'src/auth/decorators/auth.decorator';
 
 @ApiTags('docentes')
 @Controller('docentes')
@@ -21,6 +24,12 @@ export class DocentesController {
   async findAll() {
     const docente = await this.docentesService.findAll()
     return docente.map(docente => new DocenteEntity(docente));
+  }
+
+  @Get('docenteinfo')
+  @AllAuth(RolUsuario.Docente)
+  docenteinfo(@ActiveUsuario() usuario) {
+    return this.docentesService.docenteinfo(usuario);
   }
 
   @Get(':id')

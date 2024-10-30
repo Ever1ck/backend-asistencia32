@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocenteDto } from './dto/create-docente.dto';
 import { UpdateDocenteDto } from './dto/update-docente.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RolUsuario } from '@prisma/client';
 
 @Injectable()
 export class DocentesService {
@@ -63,6 +62,78 @@ export class DocentesService {
     });
   }
 
+  async docenteinfo(usuario: { email: string; rol: string; }) {
+    if (!usuario) {
+      throw new BadRequestException('El objeto usuario no puede ser undefined');
+    }
+
+    const userWithPersona = await this.prisma.usuario.findUnique({
+      where: { email: usuario.email },
+      include: {
+        Persona: {
+          select: {
+            nombres: true,
+            apellido_paterno: true,
+            apellido_materno: true,
+            fecha_nacimiento: true,
+          },
+        },
+        DocenteCurso: {
+          include: {
+            curso: {
+              select: {
+                area: {
+                  select: {
+                    nombrearea: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        Horario: {
+          select: {
+            dia: true,
+            horas: true,
+            gradoAcademico: {
+              select: {
+                id: true,
+                grado: true,
+                seccion: true,
+                turno: true,
+                _count: {
+                  select: {
+                    Estudiante: true
+                  }
+                }
+              }
+            },
+            curso: {
+              select: {
+                area: {
+                  select: {
+                    nombrearea: true
+                  }
+                }
+              }
+            }
+          },
+        }
+      }
+    });
+
+    if (!userWithPersona) {
+      throw new NotFoundException(`Usuario no encontrado: ${usuario.email}`);
+    }
+    return {
+      id: userWithPersona.id,
+      email: userWithPersona.email,
+      persona: userWithPersona.Persona,
+      docentecurso: userWithPersona.DocenteCurso,
+      horario: userWithPersona.Horario
+    };
+  }
+
   findOne(id: number) {
     return this.prisma.usuario.findUnique({
       where: { id },
@@ -79,6 +150,28 @@ export class DocentesService {
           include: {
             curso: true
           }
+        },
+        Horario: {
+          select: {
+            dia: true,
+            horas: true,
+            gradoAcademico: {
+              select: {
+                grado: true,
+                seccion: true,
+                turno: true,
+              }
+            },
+            curso: {
+              select: {
+                area: {
+                  select: {
+                    nombrearea: true
+                  }
+                }
+              }
+            }
+          },
         }
       }
     });
@@ -91,4 +184,6 @@ export class DocentesService {
   remove(id: number) {
     return this.prisma.usuario.delete({ where: { id } });
   }
+
 }
+
