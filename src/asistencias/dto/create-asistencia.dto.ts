@@ -1,10 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { EstadoAsis } from "@prisma/client";
-import { IsEnum, IsInt, IsNotEmpty } from "class-validator";
+import { IsDateString, IsEnum, IsInt, IsNotEmpty } from "class-validator";
 
 export class CreateAsistenciaDto {
 
     @ApiProperty()
+    @IsDateString()
     fecha: Date;
 
     @ApiProperty()

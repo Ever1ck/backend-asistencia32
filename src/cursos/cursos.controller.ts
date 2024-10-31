@@ -3,7 +3,10 @@ import { CursosService } from './cursos.service';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { RolUsuario } from '@prisma/client';
 
+@Auth(RolUsuario.Docente)
 @ApiTags('cursos')
 @Controller('cursos')
 export class CursosController {

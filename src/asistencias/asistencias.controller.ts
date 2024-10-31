@@ -7,7 +7,7 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('asistencias')
 @Controller('asistencias')
 export class AsistenciasController {
-  constructor(private readonly asistenciasService: AsistenciasService) {}
+  constructor(private readonly asistenciasService: AsistenciasService) { }
 
   @Post()
   create(@Body() createAsistenciaDto: CreateAsistenciaDto) {
@@ -33,4 +33,10 @@ export class AsistenciasController {
   remove(@Param('id') id: string) {
     return this.asistenciasService.remove(+id);
   }
+
+  @Get('reporte/:fecha')
+  async obtenerReportePorDia(@Param('fecha') fecha: string) {
+    return this.asistenciasService.obtenerReporteAsistenciaPorDia(fecha);
+  }
+
 }

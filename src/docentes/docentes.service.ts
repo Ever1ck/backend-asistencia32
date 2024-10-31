@@ -49,6 +49,7 @@ export class DocentesService {
             },
             curso: {
               select: {
+                id: true,
                 area: {
                   select: {
                     nombrearea: true
@@ -110,6 +111,7 @@ export class DocentesService {
             },
             curso: {
               select: {
+                id: true,
                 area: {
                   select: {
                     nombrearea: true
