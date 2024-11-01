@@ -81,6 +81,31 @@ async function main() {
       fecha_nacimiento: new Date('2002-07-10'),
     },
   });
+  const persona7 = await prisma.persona.create({
+    data: {
+      dni: '72654567',
+      nombres: 'Carlos',
+      apellido_paterno: 'Garcia',
+      apellido_materno: 'Lopez',
+      telefono: '978654321',
+      direccion: 'Av. Libertad 456',
+      sexo: 'Masculino',
+      fecha_nacimiento: new Date('1980-05-10'),
+    },
+  });
+  const persona8 = await prisma.persona.create({
+    data: {
+      dni: '72334567',
+      nombres: 'Sandra',
+      apellido_paterno: 'Ramirez',
+      apellido_materno: 'Torres',
+      telefono: '956785432',
+      direccion: 'Av. Progreso 123',
+      sexo: 'Femenino',
+      fecha_nacimiento: new Date('1982-11-20'),
+    },
+  });
+
   // Crear Usuarios
   const usuario1 = await prisma.usuario.create({
     data: {
@@ -115,6 +140,28 @@ async function main() {
       },
     },
   });
+  const usuario4 = await prisma.usuario.create({
+    data: {
+      email: 'carlos.garcia@gmail.com',
+      password: passwordadmin,
+      rol: 'Docente',
+      avatar: 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png',
+      Persona: {
+        connect: { id: persona7.id },
+      },
+    },
+  });
+  const usuario5 = await prisma.usuario.create({
+    data: {
+      email: 'sandra.ramirez@gmail.com',
+      password: passwordadmin,
+      rol: 'Docente',
+      avatar: 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png',
+      Persona: {
+        connect: { id: persona8.id },
+      },
+    },
+  });
 
 
   const aula1 = await prisma.aula.create({
@@ -138,7 +185,20 @@ async function main() {
       numeroAula: 103,
     },
   });
-
+  const aula4 = await prisma.aula.create({
+    data: {
+      edificio: 1,
+      piso: 1,
+      numeroAula: 104,
+    },
+  });
+  const aula5 = await prisma.aula.create({
+    data: {
+      edificio: 1,
+      piso: 2,
+      numeroAula: 201,
+    },
+  });
 
   const area1 = await prisma.area.create({
     data: {
@@ -201,7 +261,7 @@ async function main() {
     data: {
       areaid: 5,
     },
-  }); 
+  });
 
 
   const docentecurso1 = await prisma.docenteCurso.create({
@@ -219,6 +279,25 @@ async function main() {
       tutor_id: usuario2.id,
       aula_id: aula1.id,
       turno: 'Dia',
+    },
+  });
+  const gradoacademico2 = await prisma.gradoAcademico.create({
+    data: {
+      grado: 'Segundo',
+      seccion: 'A',
+      tutor_id: usuario4.id,
+      aula_id: aula4.id,
+      turno: 'Dia',
+    },
+  });
+
+  const gradoacademico3 = await prisma.gradoAcademico.create({
+    data: {
+      grado: 'Tercero',
+      seccion: 'B',
+      tutor_id: usuario5.id,
+      aula_id: aula5.id,
+      turno: 'Tarde',
     },
   });
 
@@ -245,7 +324,25 @@ async function main() {
     },
   });
 
-  console.log('Datos iniciales creados.');
+  const estudiantesSegundoGrado = Array.from({ length: 10 }, (_, i) => ({
+    codigo_matricula: `2021-200${i + 1}`,
+    persona_id: persona1.id, // Puedes cambiar el ID de la persona para cada estudiante
+    gradoAcademico_id: gradoacademico2.id,
+  }));
+  await prisma.estudiante.createMany({
+    data: estudiantesSegundoGrado,
+  });
+
+  const estudiantesTerceroGrado = Array.from({ length: 10 }, (_, i) => ({
+    codigo_matricula: `2021-300${i + 1}`,
+    persona_id: persona2.id, // Puedes cambiar el ID de la persona para cada estudiante
+    gradoAcademico_id: gradoacademico3.id,
+  }));
+  await prisma.estudiante.createMany({
+    data: estudiantesTerceroGrado,
+  });
+
+  console.log('Datos iniciales adicionales creados.');
 }
 
 main()
