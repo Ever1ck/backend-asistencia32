@@ -67,6 +67,15 @@ CREATE TABLE "Usuario" (
 );
 
 -- CreateTable
+CREATE TABLE "Modulo" (
+    "id" SERIAL NOT NULL,
+    "rol" "RolUsuario" NOT NULL,
+    "modulos" TEXT[],
+
+    CONSTRAINT "Modulo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Estudiante" (
     "id" SERIAL NOT NULL,
     "codigo_matricula" TEXT NOT NULL,
@@ -105,9 +114,17 @@ CREATE TABLE "GradoAcademico" (
 );
 
 -- CreateTable
+CREATE TABLE "Area" (
+    "id" SERIAL NOT NULL,
+    "nombrearea" TEXT NOT NULL,
+
+    CONSTRAINT "Area_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Curso" (
     "id" SERIAL NOT NULL,
-    "area" TEXT NOT NULL,
+    "areaid" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -130,6 +147,7 @@ CREATE TABLE "Horario" (
     "id" SERIAL NOT NULL,
     "gradoAcademico_id" INTEGER NOT NULL,
     "curso_id" INTEGER NOT NULL,
+    "docente_id" INTEGER NOT NULL,
     "turno" "TurnoH" NOT NULL,
     "dia" "DiaH" NOT NULL,
     "horas" "HoraH"[],
@@ -142,6 +160,7 @@ CREATE TABLE "Asistencia" (
     "id" SERIAL NOT NULL,
     "fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "curso_id" INTEGER NOT NULL,
+    "gradoAcademico_id" INTEGER NOT NULL,
     "estudiante_id" INTEGER NOT NULL,
     "estadoAsistencia" "EstadoAsis" NOT NULL,
 
@@ -217,13 +236,16 @@ CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 CREATE UNIQUE INDEX "Usuario_Persona_id_key" ON "Usuario"("Persona_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Modulo_rol_key" ON "Modulo"("rol");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Estudiante_codigo_matricula_key" ON "Estudiante"("codigo_matricula");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Estudiante_persona_id_key" ON "Estudiante"("persona_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Curso_area_key" ON "Curso"("area");
+CREATE UNIQUE INDEX "Area_nombrearea_key" ON "Area"("nombrearea");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Justificacion_resolucion_id_key" ON "Justificacion"("resolucion_id");
@@ -244,6 +266,9 @@ ALTER TABLE "GradoAcademico" ADD CONSTRAINT "GradoAcademico_tutor_id_fkey" FOREI
 ALTER TABLE "GradoAcademico" ADD CONSTRAINT "GradoAcademico_aula_id_fkey" FOREIGN KEY ("aula_id") REFERENCES "Aula"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Curso" ADD CONSTRAINT "Curso_areaid_fkey" FOREIGN KEY ("areaid") REFERENCES "Area"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "DocenteCurso" ADD CONSTRAINT "DocenteCurso_docente_id_fkey" FOREIGN KEY ("docente_id") REFERENCES "Usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -256,7 +281,13 @@ ALTER TABLE "Horario" ADD CONSTRAINT "Horario_gradoAcademico_id_fkey" FOREIGN KE
 ALTER TABLE "Horario" ADD CONSTRAINT "Horario_curso_id_fkey" FOREIGN KEY ("curso_id") REFERENCES "Curso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Horario" ADD CONSTRAINT "Horario_docente_id_fkey" FOREIGN KEY ("docente_id") REFERENCES "Usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Asistencia" ADD CONSTRAINT "Asistencia_curso_id_fkey" FOREIGN KEY ("curso_id") REFERENCES "Curso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Asistencia" ADD CONSTRAINT "Asistencia_gradoAcademico_id_fkey" FOREIGN KEY ("gradoAcademico_id") REFERENCES "GradoAcademico"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Asistencia" ADD CONSTRAINT "Asistencia_estudiante_id_fkey" FOREIGN KEY ("estudiante_id") REFERENCES "Estudiante"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

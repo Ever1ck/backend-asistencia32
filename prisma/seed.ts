@@ -324,24 +324,6 @@ async function main() {
     },
   });
 
-  const estudiantesSegundoGrado = Array.from({ length: 10 }, (_, i) => ({
-    codigo_matricula: `2021-200${i + 1}`,
-    persona_id: persona1.id, // Puedes cambiar el ID de la persona para cada estudiante
-    gradoAcademico_id: gradoacademico2.id,
-  }));
-  await prisma.estudiante.createMany({
-    data: estudiantesSegundoGrado,
-  });
-
-  const estudiantesTerceroGrado = Array.from({ length: 10 }, (_, i) => ({
-    codigo_matricula: `2021-300${i + 1}`,
-    persona_id: persona2.id, // Puedes cambiar el ID de la persona para cada estudiante
-    gradoAcademico_id: gradoacademico3.id,
-  }));
-  await prisma.estudiante.createMany({
-    data: estudiantesTerceroGrado,
-  });
-
   console.log('Datos iniciales adicionales creados.');
 }
 
