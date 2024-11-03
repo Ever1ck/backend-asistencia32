@@ -67,4 +67,40 @@ export class AsistenciasService {
     }));
   }
 
+  async reportePorGradoAcademico(id: number) {
+    const asistencias = await this.prisma.asistencia.findMany({
+      where: {
+        gradoAcademico_id: id
+      },
+      include: {
+        estudiante: {
+          include: {
+            Persona: true, // Incluye información de la persona si es necesario
+          },
+        },
+        curso: {
+          select: {
+            id: true,
+            area: {
+              select: {
+                nombrearea: true,
+              }, // Ajusta según tus necesidades
+            }
+          }
+        }, // Incluye el curso si es necesario
+      },
+    });
+    return asistencias.map((asistencia) => ({
+      id: asistencia.id,
+      fecha: asistencia.fecha,
+      curso_id: asistencia.curso.id,
+      gradoAcademico_id: asistencia.gradoAcademico_id,
+      estudiante_id: asistencia.estudiante.id,
+      estadoAsistencia: asistencia.estadoAsistencia,
+      estudiante_nombre: `${asistencia.estudiante.Persona.nombres} ${asistencia.estudiante.Persona.apellido_paterno} ${asistencia.estudiante.Persona.apellido_materno}`,
+      
+      curso_area: asistencia.curso.area.nombrearea, // Ajusta según tus necesidades
+    }));
+  }
+
 }

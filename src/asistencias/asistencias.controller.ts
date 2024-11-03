@@ -32,6 +32,11 @@ export class AsistenciasController {
     return this.asistenciasService.update(+id, updateAsistenciaDto);
   }
 
+  @Get('reportegrado/:id')
+  async reportePorGradoAcademico(@Param('id') id: string) {
+    return this.asistenciasService.reportePorGradoAcademico(+id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.asistenciasService.remove(+id);
@@ -41,5 +46,7 @@ export class AsistenciasController {
   async obtenerReportePorDia(@Param('fecha') fecha: string) {
     return this.asistenciasService.obtenerReporteAsistenciaPorDia(fecha);
   }
+
+  
 
 }
