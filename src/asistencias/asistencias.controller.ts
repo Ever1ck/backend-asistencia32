@@ -3,7 +3,10 @@ import { AsistenciasService } from './asistencias.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { RolUsuario } from '@prisma/client';
 
+@Auth(RolUsuario.Docente)
 @ApiTags('asistencias')
 @Controller('asistencias')
 export class AsistenciasController {
