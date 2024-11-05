@@ -82,6 +82,12 @@ model Modulo {
   modulos             String[]
 }
 
+enum EstadoEstudiante {
+  Regular
+  Retirado
+  Expulsado
+}
+
 
 model Estudiante {
   id                  Int      @id @default(autoincrement())
@@ -90,12 +96,16 @@ model Estudiante {
   updated_at          DateTime @updatedAt
   
   // Relaciones
-  persona_id          Int      @unique
-  Persona             Persona  @relation(fields: [persona_id], references: [id])
+  Persona_id          Int      @unique
+  Persona             Persona  @relation(fields: [Persona_id], references: [id])
   
-  gradoAcademico_id   Int
-  GradoAcademico      GradoAcademico @relation(fields: [gradoAcademico_id], references: [id])
+  GradoAcademico_id   Int?
+  GradoAcademico      GradoAcademico? @relation(fields: [GradoAcademico_id], references: [id])
 
+  EstadoEstudiante    EstadoEstudiante @default(Regular)
+  Estado              Boolean  @default(true)
+
+  // Relaciones
   asistencias         Asistencia[]
   Justificacion       Justificacion[]
   Notificacion        Notificacion[]

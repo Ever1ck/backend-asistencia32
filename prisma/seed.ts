@@ -304,23 +304,23 @@ async function main() {
   const estudiante1 = await prisma.estudiante.create({
     data: {
       codigo_matricula: '2020-14019',
-      persona_id: persona4.id,
-      gradoAcademico_id: gradoacademico1.id,
+      Persona_id: persona4.id,
+      GradoAcademico_id: gradoacademico1.id,
     },
   });
 
   const estudiante2 = await prisma.estudiante.create({
     data: {
       codigo_matricula: '2020-14020',
-      persona_id: persona5.id,
-      gradoAcademico_id: gradoacademico1.id,
+      Persona_id: persona5.id,
+      GradoAcademico_id: gradoacademico1.id,
     },
   });
   const estudiante3 = await prisma.estudiante.create({
     data: {
       codigo_matricula: '2020-14021',
-      persona_id: persona6.id,
-      gradoAcademico_id: gradoacademico1.id,
+      Persona_id: persona6.id,
+      GradoAcademico_id: gradoacademico1.id,
     },
   });
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Estudiante } from "@prisma/client";
+import { EstadoEstudiante, Estudiante } from "@prisma/client";
 
 export class EstudianteEntity implements Estudiante {
 
@@ -10,10 +10,16 @@ export class EstudianteEntity implements Estudiante {
     codigo_matricula: string;
 
     @ApiProperty()
-    persona_id: number;
+    Persona_id: number;
 
     @ApiProperty()
-    gradoAcademico_id: number;
+    GradoAcademico_id: number;
+
+    @ApiProperty()
+    EstadoEstudiante: EstadoEstudiante;
+
+    @ApiProperty()
+    Estado: boolean;
 
     @ApiProperty()
     created_at: Date;

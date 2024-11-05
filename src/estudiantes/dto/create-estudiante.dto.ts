@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateEstudianteDto {
     @ApiProperty()
@@ -10,11 +10,12 @@ export class CreateEstudianteDto {
     @ApiProperty()
     @IsInt()
     @Type(() => Number)
-    persona_id: number;
+    Persona_id: number;
 
     @ApiProperty()
     @IsInt()
     @Type(() => Number)
+    @IsOptional()
     gradoAcademico_id: number;
 
 }

@@ -5,6 +5,9 @@ CREATE TYPE "SexoPersona" AS ENUM ('Masculino', 'Femenino');
 CREATE TYPE "RolUsuario" AS ENUM ('Usuario', 'Docente', 'Auxiliar', 'Secretaria', 'Innovacion', 'Subdirector', 'Director', 'Administrador');
 
 -- CreateEnum
+CREATE TYPE "EstadoEstudiante" AS ENUM ('Regular', 'Retirado', 'Expulsado');
+
+-- CreateEnum
 CREATE TYPE "GradoAc" AS ENUM ('Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto');
 
 -- CreateEnum
@@ -81,8 +84,10 @@ CREATE TABLE "Estudiante" (
     "codigo_matricula" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "persona_id" INTEGER NOT NULL,
-    "gradoAcademico_id" INTEGER NOT NULL,
+    "Persona_id" INTEGER NOT NULL,
+    "GradoAcademico_id" INTEGER,
+    "EstadoEstudiante" "EstadoEstudiante" NOT NULL DEFAULT 'Regular',
+    "Estado" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Estudiante_pkey" PRIMARY KEY ("id")
 );
@@ -242,7 +247,7 @@ CREATE UNIQUE INDEX "Modulo_rol_key" ON "Modulo"("rol");
 CREATE UNIQUE INDEX "Estudiante_codigo_matricula_key" ON "Estudiante"("codigo_matricula");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Estudiante_persona_id_key" ON "Estudiante"("persona_id");
+CREATE UNIQUE INDEX "Estudiante_Persona_id_key" ON "Estudiante"("Persona_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Area_nombrearea_key" ON "Area"("nombrearea");
@@ -254,10 +259,10 @@ CREATE UNIQUE INDEX "Justificacion_resolucion_id_key" ON "Justificacion"("resolu
 ALTER TABLE "Usuario" ADD CONSTRAINT "Usuario_Persona_id_fkey" FOREIGN KEY ("Persona_id") REFERENCES "Persona"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Estudiante" ADD CONSTRAINT "Estudiante_persona_id_fkey" FOREIGN KEY ("persona_id") REFERENCES "Persona"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Estudiante" ADD CONSTRAINT "Estudiante_Persona_id_fkey" FOREIGN KEY ("Persona_id") REFERENCES "Persona"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Estudiante" ADD CONSTRAINT "Estudiante_gradoAcademico_id_fkey" FOREIGN KEY ("gradoAcademico_id") REFERENCES "GradoAcademico"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Estudiante" ADD CONSTRAINT "Estudiante_GradoAcademico_id_fkey" FOREIGN KEY ("GradoAcademico_id") REFERENCES "GradoAcademico"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "GradoAcademico" ADD CONSTRAINT "GradoAcademico_tutor_id_fkey" FOREIGN KEY ("tutor_id") REFERENCES "Usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

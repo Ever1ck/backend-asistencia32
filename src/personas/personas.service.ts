@@ -23,10 +23,15 @@ export class PersonasService {
   }
 
   update(id: number, updatePersonaDto: UpdatePersonaDto) {
-    return `This action updates a #${id} persona`;
+    return this.prisma.persona.update({
+      where: { id },
+      data: updatePersonaDto,
+      });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} persona`;
+    return this.prisma.persona.delete({
+      where: { id },
+      });
   }
 }
