@@ -55,6 +55,9 @@ export class EstudiantesService {
       const estudiante = await prisma.estudiante.create({
         data: {
           codigo_matricula: createEstudiantePersonaDto.codigo_matricula,
+          GradoAcademico: {
+            connect: { id: createEstudiantePersonaDto.GradoAcademico_id },
+          },
           Persona: {
             connect: { id: persona.id },
           },
