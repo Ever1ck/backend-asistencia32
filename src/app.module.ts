@@ -15,6 +15,8 @@ import { HorariosModule } from './horarios/horarios.module';
 import { AreasModule } from './areas/areas.module';
 import { ModulosModule } from './modulos/modulos.module';
 import { AsistenciasModule } from './asistencias/asistencias.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { AsistenciasModule } from './asistencias/asistencias.module';
       serveRoot: '/uploads',
     }),
     AuthModule, PersonasModule, UsuariosModule, EntradasModule, EstudiantesModule, AulasModule, GradosacademicosModule, DocentesModule, CursosModule, DocentecursosModule, HorariosModule, AreasModule, ModulosModule, AsistenciasModule],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }
